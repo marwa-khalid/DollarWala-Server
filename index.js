@@ -26,7 +26,12 @@ mongoose.connect(DB,{}).then(()=>{
     console.log("connection successful");
 }).catch((err)=>console.log("no connection"));
 
+router.get("/", (req, res) => {
+    res.send("Welcome to the DollarWala Server!");
+  });
+
 app.use(express.json());
+app.use("/", router);
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/carts", cartRoute);
