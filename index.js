@@ -13,6 +13,7 @@ const reviewRoute = require("./routes/reviews");
 const paymentRoute = require("./routes/payment");
 const franchiseRoute = require("./routes/franchise");
 const resetRoute = require("./routes/reset");
+const contactRoute = require("./routes/contact");
 const shopReviewRoute = require("./routes/ShopReviews");
 const authenticationRoute = require("./routes/authenticate");
 
@@ -40,6 +41,7 @@ app.use("/api/reviews", reviewRoute);
 app.use("/api/payments", paymentRoute)
 app.use("/api/franchise",franchiseRoute);
 app.use("/api/reset",resetRoute);
+app.use("/api/contact",contactRoute);
 app.use("/api/ShopReviews", shopReviewRoute);
 app.use("/api/authenticate",authenticationRoute);
 
