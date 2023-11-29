@@ -5,6 +5,8 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const router = express.Router();
 
+const port = process.env.PORT || 5000;
+
 const userRoute = require("./routes/user");
 const productRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");
@@ -50,6 +52,6 @@ app.use("/api/authenticate",authenticationRoute);
 app.use(express.static("../client"));
 app.use('/uploads', express.static('uploads'));
 
-app.listen(5000, ()=>{
-    console.log("backened is running");
+app.listen(port, ()=>{
+    console.log(`Server running at port numnber ${port}`);
 });
