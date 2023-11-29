@@ -2,8 +2,8 @@ const express = require("express");
 const app=express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const router = express.Router();
 const cors = require("cors");
+const router = express.Router();
 
 const userRoute = require("./routes/user");
 const productRoute = require("./routes/product");
@@ -23,6 +23,8 @@ const DB = 'mongodb+srv://hamzarana:haider011@cluster0.4xnpcsg.mongodb.net/Dolla
 
 app.use(cors());
 
+
+mongoose.set("strictQuery", false);
 mongoose.connect(DB,{}).then(()=>{
     console.log("connection successful");
 }).catch((err)=>console.log("no connection"));
