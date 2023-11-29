@@ -25,7 +25,6 @@ const DB = 'mongodb+srv://hamzarana:haider011@cluster0.4xnpcsg.mongodb.net/Dolla
 
 app.use(cors());
 
-
 mongoose.set("strictQuery", false);
 mongoose.connect(DB,{}).then(()=>{
     console.log("connection successful");
