@@ -1,6 +1,5 @@
-
-const Contact = require("../models/contact");
 const router = require("express").Router();
+const Contact = require("../models/contact");
 
 router.post('/', async (req, res) => {  
     try {
