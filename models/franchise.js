@@ -20,6 +20,11 @@ const franchiseSchema = new mongoose.Schema({
     preferredLocation: {
       type: String,
       required: true,
+    },
+    status:{
+      type: String,
+      default:"Pending"
+
     }
     
     

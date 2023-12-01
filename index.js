@@ -3,7 +3,7 @@ const app=express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const router = express.Router();
+const bodyParser = require('body-parser');
 
 const port = process.env.PORT || 5000;
 
@@ -28,27 +28,26 @@ app.use(cors());
 
 mongoose.set("strictQuery", false);
 mongoose.connect(DB,{}).then(()=>{
-    console.log("connection successful");
+    console.log("connection successful with db");
 }).catch((err)=>console.log("no connection"));
 
-router.get("/", (req, res) => {
-    res.send("Welcome to the DollarWala Server!");
-  });
-
 app.use(express.json());
-app.use("/", router);
+
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
-app.use("/api/carts", cartRoute);
+app.use("/api/cart", cartRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/reviews", reviewRoute);
 app.use("/api/payments", paymentRoute)
 app.use("/api/franchise",franchiseRoute);
 app.use("/api/reset",resetRoute);
+app.use("/api/categories",categoryRoute);
 app.use("/api/contact",contactRoute);
 app.use("/api/ShopReviews", shopReviewRoute);
 app.use("/api/authenticate",authenticationRoute);
-app.use("/api/categories",categoryRoute);
 
 app.use(express.static("../client"));
 app.use('/uploads', express.static('uploads'));

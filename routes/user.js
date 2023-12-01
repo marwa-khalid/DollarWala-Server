@@ -92,7 +92,9 @@ router.post("/login", async (req, res) => {
           email: user.email,
           image: user.image,
           name: user.name,
-          id: user._id
+          id: user._id,
+          address:user.address,
+          phoneNumber:user.phoneNumber
         },
       });
     }
@@ -127,7 +129,6 @@ router.get("/", async (req, res) => {
     const user = await User.find();
     //send in json format.. .send will send in text form
     res.json(user);
-    console.log("Get Request Worked");
   } catch (err) {
     res.send("Error: " + err);
   }
@@ -149,8 +150,6 @@ router.delete('/:id', async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-
 
 router.put('/edit', upload.single('image'), async (req, res) => {
   const { name, email, address, phoneNumber } = req.body;
@@ -186,7 +185,6 @@ router.put('/edit', upload.single('image'), async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 // User management API endpoints
 router.put('/:id/approve', (req, res) => {

@@ -41,17 +41,13 @@ const upload = multer({ storage: storage });
   router.put("/:id", upload.single('image'), async (req, res) => {
     try {
       const productId = req.params.id;
-      console.log(req.params);
-      console.log(req.body)
       let { title, price, description, image, quantity, category } = req.body;
       const product = await Product.findById(productId);
-      console.log(req.file)
+      
       if (req.file) {
         // If a new image is provided, update the image path
         image = 'uploads/' + req.file.filename;
       }
-      console.log("tes")
-      // Find the existing product by ID
   
       if (!product) {
         return res.status(404).send({ message: "Product not found" });
@@ -60,18 +56,14 @@ const upload = multer({ storage: storage });
       product.title = title;
       product.price = price;
       product.description = description;
-      console.log("test")
       if (image) {
         product.image = image;
       }
-      console.log("test1")
       product.quantity = quantity;
       product.category = category;
       
-      console.log("testbefor")
       // Save the updated product
       await product.save();
-      console.log("testafter")
   
       return res.send({ message: "Product updated successfully" });
     } catch (error) {

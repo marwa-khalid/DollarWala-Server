@@ -8,7 +8,6 @@ router.get("/:id", async (req, res) => {
     const review = await Review.find({ productId});
 
     res.json(review);
-    console.log("Get Request Worked");
   } catch (err) {
     res.send("Error: " + err);
   }

@@ -8,7 +8,6 @@ router.get("/", async (req, res) => {
     const review = await Review.find();
 
     res.json(review);
-    console.log("Get Request Worked");
   } catch (err) {
     res.send("Error: " + err);
   }
