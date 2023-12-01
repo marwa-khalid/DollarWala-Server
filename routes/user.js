@@ -152,25 +152,41 @@ router.delete('/:id', async (req, res) => {
 
 
 
-router.put("/:id", async (req, res) => {
-  const user = await User.findById(req.params.id);
+router.put('/edit', upload.single('image'), async (req, res) => {
+  const { name, email, address, phoneNumber } = req.body;
+  let {image} = req.body;
 
-  user.fullName = req.body.fullName;
-  user.email = req.body.email;
-  user.phoneNumber = req.body.phoneNumber;
-  user.image = req.body.image;
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
 
-  user.save((err) => {
-    if (err) {
-      res.send(err);
-      console.log("Can't update data: " + err);
-    } else {
-      //display in json format
-      res.json(user);
-      console.log("Data Updated");
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-  });
+
+    if (req.file) {
+      // If a new image is provided, update the image path
+      image = 'uploads/' + req.file.filename;
+    }
+
+    // Update user information
+    user.name = name;
+    user.address = address;
+    user.phoneNumber = phoneNumber;
+    user.email = email;
+    if (image) {
+      user.image =  image;
+    }
+
+    // Save the updated user
+    await user.save();
+    res.json({ message: 'User information updated successfully', user });
+  } catch (error) {
+    console.error('Error updating user information:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
 
 // User management API endpoints
 router.put('/:id/approve', (req, res) => {
