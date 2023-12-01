@@ -3,6 +3,7 @@ const router = express.Router();
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
+const User = require('../models/User');
 
 router.post("/", async(req, res) => {
   const {email} = req.body;
@@ -32,7 +33,7 @@ router.post("/", async(req, res) => {
         res.status(500).json({ success:false, message: "Email could not be sent. Please try again later." });
       } else {
         console.log("ok")
-        res.json({ success:true ,message: "Email sent successfully.",token:{token:token,tokenExpiration:tokenExpiration} });
+        res.json({ success:true ,message: "Email sent successfully.",token:{token:token,tokenExpiration:tokenExpiration,email:email} });
         console.log("ok")
       }
     });
@@ -42,7 +43,7 @@ router.post("/", async(req, res) => {
 router.post("/confirm", async(req, res) => {
   try{
     console.log("confirmroute");
-    const {token,verificationCode,expirationDate} = req.body;
+    const {token,verificationCode,expirationDate,email} = req.body;
     
     if(token != verificationCode){
       return res.status(400).send({success:false, message:"Code is wrong"});
@@ -50,6 +51,16 @@ router.post("/confirm", async(req, res) => {
     if(expirationDate < new Date()){
       return res.status(400).send({success:false, message:"Token has expired"});
     }
+
+    User.findByEmailAndUpdate(email, { status: 'approved' }, (err, user) => {
+      if (err) {
+        // Handle error
+        res.status(500).json({ error: 'Failed to approve user' });
+      } else {
+        // Handle successful approval
+        res.status(200).json({ message: 'User approved' });
+      }
+    });
     
     return res.status(200).json({ message: "User Verified" });
   }
