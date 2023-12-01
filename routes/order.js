@@ -1,6 +1,6 @@
 const Order = require("../models/Order");
 const { verifyToken, verifyTokenAuthorization, verifyTokenAndAdmin } = require("./verifyToken");
-
+const Product = require("../models/Product");
 const express = require("express");
 const router = express.Router();
 
@@ -20,33 +20,27 @@ router.post("/" , async (req,res)=>{
 }); 
 
 //update
-router.put("/:id", verifyTokenAndAdmin, async (req,res)=>{
-    try{
-       
-       const updatedOrder = await Order.findByIdAndUpdate(req.params.id,{
-        $set: req.body
-       },
-       {new:true}
-       );
-    
-       res.status(200).json(updatedOrder);
-    }catch(err){
-      
-        res.status(500).json(err);
+router.put("/:id", async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    order.status = req.body.status;
+    if(req.body.status === "cancelled")
+    {
+      for(const prodItem of order.products)
+
+      {
+       const product = await Product.findById(prodItem.productId);
+       product.quantity += prodItem.quantity;
+       await product.save();
+      }
     }
-    
+    await order.save();
+  }
+  catch (error) {
+    return res.status(404).json(error);
+  }
 });
 
-//Delete 
-
-router.delete("/:id", verifyTokenAndAdmin, async (req,res)=>{
-    try{
-        await Order.findByIdAndDelete(req.params.id)
-        res.status(200).json("Order has been delted..")
-    }catch(err){
-       res.status(500).json(err)  
-    }
-});
 
 //GET user orders
 
