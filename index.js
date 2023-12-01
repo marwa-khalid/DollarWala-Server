@@ -18,6 +18,7 @@ const resetRoute = require("./routes/reset");
 const contactRoute = require("./routes/contact");
 const shopReviewRoute = require("./routes/ShopReviews");
 const authenticationRoute = require("./routes/authenticate");
+const categoryRoute = require("./routes/categories");
 
 dotenv.config();
 
@@ -47,6 +48,7 @@ app.use("/api/reset",resetRoute);
 app.use("/api/contact",contactRoute);
 app.use("/api/ShopReviews", shopReviewRoute);
 app.use("/api/authenticate",authenticationRoute);
+app.use("/api/categories",categoryRoute);
 
 app.use(express.static("../client"));
 app.use('/uploads', express.static('uploads'));
