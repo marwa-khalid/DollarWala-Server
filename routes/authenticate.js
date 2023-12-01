@@ -3,6 +3,7 @@ const router = express.Router();
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
+const User = require("../models/User");
 
 router.post("/", async(req, res) => {
   const {email} = req.body;
@@ -42,7 +43,7 @@ router.post("/", async(req, res) => {
 router.post("/confirm", async(req, res) => {
   try{
     console.log("confirmroute");
-    const {token,verificationCode,expirationDate} = req.body;
+    const {token,verificationCode,expirationDate,email} = req.body;
     
     if(token != verificationCode){
       return res.status(400).send({success:false, message:"Code is wrong"});
@@ -50,8 +51,24 @@ router.post("/confirm", async(req, res) => {
     if(expirationDate < new Date()){
       return res.status(400).send({success:false, message:"Token has expired"});
     }
+
+    try {
+      const user = await User.findOneAndUpdate(
+        { email: email},
+        { $set: { status: 'approved' } },
+        { new: true } // This option returns the modified document
+      );
     
-    return res.status(200).json({ message: "User Verified" });
+      if (user) {
+        res.status(200).json({ message: 'User approved' });
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to approve user' });
+    }
+    
   }
   catch(err){
     return res.status(500).send({success:false, message:"error"})
