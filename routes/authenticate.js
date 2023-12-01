@@ -52,18 +52,24 @@ router.post("/confirm", async(req, res) => {
       return res.status(400).send({success:false, message:"Token has expired"});
     }
 
-    User.findByEmailAndUpdate(email, { status: 'approved' }, (err, user) => {
-      if (err) {
-        // Handle error
-        res.status(500).json({ error: 'Failed to approve user' });
-      } else {
-        // Handle successful approval
-        res.status(200).json({ message: 'User approved' });
-      }
-    });
+    try {
+      const user = await User.findOneAndUpdate(
+        { email: email }, 
+        { $set: { status: 'approved' } },
+        { new: true }
+      );
     
-    return res.status(200).json({ message: "User Verified" });
-  }
+      if (user) {
+        res.status(200).json({ message: 'User approved' });
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Failed to approve user' });
+    }
+    
+   }
   catch(err){
     return res.status(500).send({success:false, message:"error"})
   }
