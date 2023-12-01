@@ -1,22 +1,49 @@
 const Order = require("../models/Order");
-
+const Product = require("../models/Product");
 const express = require("express");
 const router = express.Router();
 
 router.post("/" , async (req,res)=>{
-  console.log("helo")
+ 
   const newOrder = new Order(req.body);
-  console.log("helo1")
+  for(const prodItem of req.body.products)
+  {
+   const product = await Product.findById(prodItem.productId);
+   product.quantity -= prodItem.quantity;
+   await product.save();
+  }
   try{
-    console.log("helo2")
+    
    const savedOrder = await newOrder.save();
-   console.log("helo3")
+   
    res.status(200).json(savedOrder);
   }catch(err){
      res.status(500).json(err)
-     console.log("helo4")
+     
   }
 }); 
+
+//update order status
+router.put("/:id", async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    order.status = req.body.status;
+    if(req.body.status === "cancelled")
+    {
+      for(const prodItem of order.products)
+
+      {
+       const product = await Product.findById(prodItem.productId);
+       product.quantity += prodItem.quantity;
+       await product.save();
+      }
+    }
+    await order.save();
+  }
+  catch (error) {
+    return res.status(404).json(error);
+  }
+});
 
 //Delete 
 
@@ -57,7 +84,7 @@ router.get('/all', async (req, res) => {
 
 //GET All 
 
-router.get("/",  async (req,res)=>{
+router.get("/", async (req,res)=>{
     try{
 const orders = await Order.find();
 res.status(200).json(orders);
