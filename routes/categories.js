@@ -5,9 +5,19 @@ const Product = require('../models/Product');
 
 router.post("/" , async (req,res)=>{
  
-  const category = new Category(req.body);
+  try{
+    const category = new Category(req.body);
+    if(!category){
+      console.log(category)
+      return res.status(400).res.json({message:"Field is empty"});
+      
+    }
    await category.save();
-   res.status(200).json(category);
+   return res.status(200).json(category);
+  }
+  catch(error){
+    return res.status(400).res.json({message:"Internal server error"});
+  }
   }
 ); 
 
