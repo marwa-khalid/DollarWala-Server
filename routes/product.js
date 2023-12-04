@@ -22,7 +22,7 @@ const upload = multer({ storage: storage });
     const { title, price, description,quantity, category } = req.body;
     const image = 'uploads/' + req.file.filename;
     if (!title || !price || !description || !quantity || !category) {
-      return res.status(400).json({ message: 'Please provide all required fields.' });
+      return res.status(400).send({ message: 'Please provide all required fields.' });
     }
     const product = new Product({
         title,
@@ -38,7 +38,7 @@ const upload = multer({ storage: storage });
     // Respond with a success message or error as needed
     res.status(200).send({message:'Product saved successfully.'});
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).send({ error: 'Internal Server Error' });
   }
   });
 
