@@ -7,16 +7,12 @@ router.post("/" , async (req,res)=>{
  
   try{
     const category = new Category(req.body);
-    if(!category){
-      console.log(category)
-      return res.send({message:"Field is empty"});
-      
-    }
+
    await category.save();
    return res.status(200).json(category);
   }
   catch(error){
-    return res.send({message:"Internal server error"});
+    return res.status(400).send({message:"Field is empty"});
   }
   }
 ); 

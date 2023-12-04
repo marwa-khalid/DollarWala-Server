@@ -33,10 +33,10 @@ mongoose.connect(DB,{}).then(()=>{
     console.log("connection successful with db");
 }).catch((err)=>console.log("no connection"));
 
-
 router.get('/', (req,res)=>{
     res.send("Welcome to DollarWala Server!");
 })
+
 app.use(express.json());
 
 app.use(bodyParser.json({ limit: '50mb' }));

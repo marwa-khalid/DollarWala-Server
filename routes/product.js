@@ -13,36 +13,36 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-  router.post('/', upload.single('image'), async (req, res) => {
-    try {
-    if (!req.file) {
-      return res.send('No file uploaded.');
-    }
-  
-    const { title, price, description,quantity, category } = req.body;
-    const image = 'uploads/' + req.file.filename;
-    if (!title || !price || !description || !quantity || !category) {
-      return res.send({ message: 'Please provide all required fields.' });
-    }
-    const product = new Product({
-        title,
-        price,
-        description,
-        quantity,
-        image,
-        category
-      });
+router.post('/', upload.single('image'), async (req, res) => {
+  try {
 
-      await product.save();
-
-    // Respond with a success message or error as needed
-    return res.status(200).send({message:'Product saved successfully.'});
-  } catch (error) {
-    return res.status(500).json({ error: 'Internal Server Error' });
+  const { title, price, description,quantity, category } = req.body;
+  if (!title || !price || !description || !quantity || !category) {
+    return res.status(400).send({ message: 'Please provide all required fields.' });
   }
-  });
+  if (!req.file) {
+    return res.status(400).send({message: 'No file uploaded.'});
+  }
+  const image = 'uploads/' + req.file.filename;
 
-  
+  const product = new Product({
+      title,
+      price,
+      description,
+      quantity,
+      image,
+      category
+    });
+    console.log("hi")
+    await product.save();
+    console.log("hi")
+  // Respond with a success message or error as needed
+  return res.status(200).send({message:'Product saved successfully.'});
+} catch (error) {
+  return res.status(500).send({ message: 'Internal Server Error' });
+}
+});
+
   router.put("/:id", upload.single('image'), async (req, res) => {
     try {
       const productId = req.params.id;
