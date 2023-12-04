@@ -16,13 +16,13 @@ const upload = multer({ storage: storage });
   router.post('/', upload.single('image'), async (req, res) => {
     try {
     if (!req.file) {
-      return res.status(400).send('No file uploaded.');
+      return res.send('No file uploaded.');
     }
   
     const { title, price, description,quantity, category } = req.body;
     const image = 'uploads/' + req.file.filename;
     if (!title || !price || !description || !quantity || !category) {
-      return res.status(400).send({ message: 'Please provide all required fields.' });
+      return res.send({ message: 'Please provide all required fields.' });
     }
     const product = new Product({
         title,
