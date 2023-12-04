@@ -14,14 +14,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
   router.post('/', upload.single('image'), async (req, res) => {
-    
+    try {
     if (!req.file) {
       return res.status(400).send('No file uploaded.');
     }
   
     const { title, price, description,quantity, category } = req.body;
     const image = 'uploads/' + req.file.filename;
-  
+    if (!title || !price || !description || !quantity || !category) {
+      return res.status(400).json({ message: 'Please provide all required fields.' });
+    }
     const product = new Product({
         title,
         price,
@@ -34,7 +36,10 @@ const upload = multer({ storage: storage });
       await product.save();
 
     // Respond with a success message or error as needed
-    res.status(200).send('Product saved successfully.');
+    res.status(200).send({message:'Product saved successfully.'});
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
   });
 
   
