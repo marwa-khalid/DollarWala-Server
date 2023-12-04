@@ -36,9 +36,9 @@ const upload = multer({ storage: storage });
       await product.save();
 
     // Respond with a success message or error as needed
-    res.status(200).send({message:'Product saved successfully.'});
+    return res.status(200).send({message:'Product saved successfully.'});
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
   });
 
