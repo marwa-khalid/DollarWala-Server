@@ -34,12 +34,10 @@ res.status(200).json(categories);
 router.delete('/:categoryId', async (req, res) => {
     const categoryId = req.params.categoryId;
     const category = await Category.findById(categoryId);
-    console.log(category)
     try {
       // Find all products associated with the category
       const productsToDelete = await Product.find({ category: category.category });
-      console.log(productsToDelete)
-  
+
       // Delete all associated products
       productsToDelete.map(async (product) => {
         await Product.findByIdAndDelete(product._id);

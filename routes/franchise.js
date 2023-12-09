@@ -4,7 +4,6 @@ const nodemailer = require("nodemailer");
 
 router.post('/sendemail', async(req, res) => {
   const { email,action, franchiseId } = req.body;
-  console.log(email)
   
   const franchise = await Franchise.findById(franchiseId);
   
@@ -55,7 +54,6 @@ router.post('/sendemail', async(req, res) => {
         console.error("Error sending email:", error);
         res.status(500).json({ success:false, message: "An error occurred. Please try again later." });
       } else {
-        console.log("Email sent:", info.response);
         franchise.status = "Cleared";
         await franchise.save();
         res.json({ success:true ,message: "Email sent successfully." });

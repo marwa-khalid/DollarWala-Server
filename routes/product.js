@@ -33,9 +33,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       image,
       category
     });
-    console.log("hi")
     await product.save();
-    console.log("hi")
   // Respond with a success message or error as needed
   return res.status(200).send({message:'Product saved successfully.'});
 } catch (error) {

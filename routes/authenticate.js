@@ -18,7 +18,6 @@ router.post("/", async(req, res) => {
         pass: "pofu vgus dyoe ocoh",
       },
     });
-    console.log("working")
     const mailOptions = {
       from: "dollarwalafyp@gmail.com",
       to: email,
@@ -26,15 +25,12 @@ router.post("/", async(req, res) => {
       html: `<p>You have requested to register on DollarWala. Here is your verification code.</p>
       <a href="${token}">${token}</a>`
     };
-    console.log(mailOptions)
     transporter.sendMail(mailOptions, (error) => {
       if (error) {
         console.log("Error sending email:", error);
         res.status(500).json({ success:false, message: "Email could not be sent. Please try again later." });
       } else {
-        console.log("ok")
         res.json({ success:true ,message: "Email sent successfully.",token:{token:token,tokenExpiration:tokenExpiration} });
-        console.log("ok")
       }
     });
   }
@@ -42,7 +38,6 @@ router.post("/", async(req, res) => {
 
 router.post("/confirm", async(req, res) => {
   try{
-    console.log("confirmroute");
     const {token,verificationCode,expirationDate,email} = req.body;
     
     if(token != verificationCode){

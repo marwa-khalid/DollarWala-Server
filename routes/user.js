@@ -85,7 +85,6 @@ router.post("/login", async (req, res) => {
         return res.status(402).json({ message: "Invalid password" });
       }
 
-      console.log(user.image)
       return res.send({
         message: "Logged in successfully",
         user: {
@@ -116,7 +115,6 @@ router.get("/:id", async (req, res) => {
     const user = await User.findById(req.params.id);
     //send in json format.. .send will send in text form
     res.json(user);
-    console.log("Get Request by ID Worked");
   } catch (err) {
     res.send("Error: " + err);
   }
@@ -189,8 +187,6 @@ router.put('/edit', upload.single('image'), async (req, res) => {
 // User management API endpoints
 router.put('/:id/approve', (req, res) => {
   const userId = req.params.id;
-  console.log(userId)
-
   // Find the user by ID and update the status to 'approved'
   User.findByIdAndUpdate(userId, { status: 'approved' }, (err, user) => {
     if (err) {

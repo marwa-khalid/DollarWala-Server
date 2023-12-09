@@ -7,8 +7,6 @@ const bcrypt = require("bcryptjs");
 
 router.post("/", async(req, res) => {
   const { email } = req.body;
-  console.log(email)
-  
   const user = await User.findOne({ email});
   if(!user){
     console.error({success:false, message: "No user"});
@@ -17,12 +15,8 @@ router.post("/", async(req, res) => {
   else {
     
     const token = crypto.randomBytes(2).toString("hex");
-    console.log( user)
-    console.log( user.resetToken)
     user.resetToken = token;
     user.resetTokenExpiration = Date.now() + 3600000;
-    console.log( user.resetToken),
-    console.log( user.resetTokenExpiration),
     await user.save();
 
     const transporter = nodemailer.createTransport({
@@ -76,15 +70,12 @@ router.post("/confirm", async(req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     user.password = hashedPassword;
-
-    console.log(user.password)
     user.resetToken = '';
     user.resetTokenExpiration = null;
     await user.save();
     return res.status(200).json({ message: "Password reset was successful" });
   }
   catch(err){
-    console.log(err);
     return res.status(500).send({success:false, message:"error"})
   }
 });
