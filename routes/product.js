@@ -1,5 +1,4 @@
 const Product = require("../models/Product");
-const { verifyTokenAndAdmin } = require("./verifyToken");
 const multer = require('multer');
 const router = require("express").Router();
 
