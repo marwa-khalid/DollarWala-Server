@@ -12,7 +12,7 @@ const Wishlist = require('../models/Wishlist');
 
         if (existingWishlistItem) {
           await Wishlist.deleteOne(existingWishlistItem);
-          return res.status(400).json({ message: 'Product deleted from wishlist' });
+          return res.status(200).json({ message: 'Product deleted from wishlist' });
         }
 
         const wishlistItem = new Wishlist({
