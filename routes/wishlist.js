@@ -11,7 +11,8 @@ const Wishlist = require('../models/Wishlist');
         const existingWishlistItem = await Wishlist.findOne({ userId, productId });
 
         if (existingWishlistItem) {
-          return res.status(400).json({ message: 'Product already in the wishlist' });
+          await Wishlist.deleteOne(existingWishlistItem);
+          return res.status(400).json({ message: 'Product deleted from wishlist' });
         }
 
         const wishlistItem = new Wishlist({
