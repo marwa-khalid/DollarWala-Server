@@ -51,7 +51,6 @@ const Wishlist = require('../models/Wishlist');
     try {
       
       const productId = req.params.id;
-      console.log(productId)
   
       // Find and remove the product from the wishlist
       await Wishlist.findByIdAndDelete(productId);
