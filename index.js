@@ -37,6 +37,7 @@ router.get('/', (req,res)=>{
     res.send("Welcome to DollarWala Server!");
 })
 
+app.use(express.static("client"));
 app.use(express.json());
 
 app.use(bodyParser.json({ limit: '50mb' }));
